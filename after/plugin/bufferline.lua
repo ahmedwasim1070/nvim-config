@@ -1,92 +1,86 @@
--- Bufferline configuration for VS Code-style tabs
 require('bufferline').setup {
   options = {
-    -- Use nvim's native LSP for diagnostics
+    -- Enable LSP diagnostics integration (shows errors/warnings in tabs)
     diagnostics = "nvim_lsp",
-    
-    -- Show LSP diagnostics in bufferline
     diagnostics_update_in_insert = false,
     
-    -- Diagnostic symbols
+    -- Custom diagnostic indicator with icons
     diagnostics_indicator = function(count, level, diagnostics_dict, context)
       local icon = level:match("error") and " " or " "
       return " " .. icon .. count
     end,
-
-    -- Clickable tabs
+    
+    -- Left click to switch to buffer
     left_mouse_command = "buffer %d",
+    -- Right click to close buffer
     right_mouse_command = "bdelete! %d",
+    -- Disable middle mouse click
     middle_mouse_command = nil,
-
-    -- Buffer close icon
+    
+    -- Icons for different states
     buffer_close_icon = '󰅖',
-    modified_icon = '●',
-    close_icon = '',
+    modified_icon = '●',   
+    close_icon = '',      
     left_trunc_marker = '',
-    right_trunc_marker = '',
-
-    -- VS Code style appearance
-    separator_style = "thin", -- "slant" | "thick" | "thin" | { 'any', 'any' }
+    right_trunc_marker = '',     
     
-    -- Show buffer numbers for easier navigation
-    numbers = "ordinal", -- "none" | "ordinal" | "buffer_id" | "both"
+    separator_style = "thin",
     
-    -- Close command
+    -- Show buffer numbers for easy navigation (1, 2, 3, etc.)
+    numbers = "none",
+    
+    -- Close command when clicking close button
     close_command = "bdelete! %d",
     
-    -- Show only if more than one buffer
+    -- Always show bufferline (even with single buffer)
     always_show_bufferline = true,
     
-    -- Show tab close button
+    -- Show close buttons on tabs
     show_buffer_close_icons = true,
     show_close_icon = true,
     
-    -- Enforce regular tabs
-    enforce_regular_tabs = true,
-    
-    -- Show duplicate names with path
-    show_duplicate_prefix = true,
-    
-    -- Truncate names
-    max_name_length = 18,
-    max_prefix_length = 15,
-    truncate_names = true,
-    
-    -- Tab size
-    tab_size = 20,
-    
-    -- Color icons
+    -- Show file type icons with colors
+    show_buffer_icons = true,
     color_icons = true,
     
-    -- Show buffer icons
-    show_buffer_icons = true,
+    -- Enforce consistent tab sizes
+    enforce_regular_tabs = false,
     
-    -- Hover functionality
+    -- Handle duplicate file names by showing path
+    show_duplicate_prefix = true,
+    
+    -- Tab and name length limits
+    max_name_length = 20,
+    max_prefix_length = 16,
+    truncate_names = true,
+    tab_size = 22,
+    
+    -- Hover effect configuration
     hover = {
       enabled = true,
       delay = 200,
       reveal = {'close'}
     },
-
-    -- Sort buffers
-    sort_by = 'insert_after_current', -- 'insert_after_current' | 'insert_at_end' | 'id' | 'extension' | 'relative_directory' | 'directory' | 'tabs'
-
-    -- Custom filter for special buffers
+    
+    -- Buffer sorting method
+    sort_by = 'insert_after_current',
+    
+    -- Filter out special buffers (quickfix, help, etc.)
     custom_filter = function(buf_number, buf_numbers)
-      -- Filter out certain filetypes
       local filetype = vim.bo[buf_number].filetype
-      if filetype == "qf" or filetype == "help" then
+      -- Hide quickfix and help buffers from bufferline
+      if filetype == "qf" or filetype == "help" or filetype == "alpha" then
         return false
       end
       return true
     end,
-
-    -- Offsets for file explorers
+    
+    -- Create space for file explorers on the left
     offsets = {
       {
         filetype = "NvimTree",
         text = "File Explorer",
-        text_align = "center", -- "left" | "center" | "right"
+        text_align = "center",
         separator = true
       },
       {
@@ -94,71 +88,146 @@ require('bufferline').setup {
         text = "Neo-tree",
         text_align = "center",
         separator = true
-      }
+      },
+      {
+        filetype = "alpha",
+        text = "Dashboard",
+        text_align = "center",
+        separator = true
+      },
     },
   },
-
+  
   highlights = {
-    -- VS Code-like styling
+    -- Main bufferline background
+    fill = {
+      bg = '#000000',
+      fg = '#1a1a1a',
+    },
+
+    -- Selected tab - transparent background with white text
     buffer_selected = {
-      bold = true,
-      italic = true,
-      fg="#000000";
+      fg = '#f3f3f3',        
+      bg = 'NONE',          
+      bold = true,         
+      italic = false,     
     },
     
-    -- Inactive buffer styling
+    -- Close button on selected tab
+    close_button_selected = {
+      fg = '#ffffff',
+      bg = 'NONE',
+    },
+    
+    -- Modified indicator on selected tab
+    modified_selected = {
+      fg = '#ffaa00',        
+      bg = 'NONE',
+    },
+    
+    -- Duplicate indicator on selected tab
+    duplicate_selected = {
+      fg = '#cccccc',
+      bg = 'NONE',
+    },
+    
+    -- Visible/inactive tabs
     buffer_visible = {
+      fg = '#888888',     
+      bg = '#000000',      
       italic = false,
     },
     
-    -- Close button styling
-    close_button = {
-      fg = '#999999',
+    -- Visible tab numbers
+    numbers_visible = {
+      fg = '#666666',
+      bg = '#1a1a1a',
     },
     
+    -- Close button on visible tabs
     close_button_visible = {
-      fg = '#999999',
+      fg = '#666666',
+      bg = '#1a1a1a',
     },
     
-    close_button_selected = {
-      fg = '#ff5555',
-    },
-    
-    -- Modified indicator
-    modified_selected = {
+    -- Modified indicator on visible tabs
+    modified_visible = {
       fg = '#ffaa00',
+      bg = '#1a1a1a',
+    },
+
+    -- Hidden/background tabs
+    buffer = {
+      fg = '#666666',          -- Darker gray for background tabs
+      bg = '#f3f3f3',         -- Very dark background
     },
     
-    -- Separator styling for cleaner look
-    separator = {
-      fg = '#3c3836',
+    -- Background tab numbers
+    numbers = {
+      fg = '#444444',
+      bg = '#0d0d0d',
     },
     
+    -- Close button on background tabs
+    close_button = {
+      fg = '#444444',
+      bg = '#0d0d0d',
+    },
+    
+    -- Modified indicator on background tabs
+    modified = {
+      fg = '#cc8800',
+      bg = '#0d0d0d',
+    },
+
+    -- Separators between tabs (light white borders)
     separator_selected = {
-      fg = '#3c3836',
+      fg = '#333333',          -- Light gray separator for selected tab
+      bg = 'NONE',
     },
     
     separator_visible = {
-      fg = '#3c3836',
+      fg = '#2a2a2a',          -- Darker separator for visible tabs
+      bg = '#1a1a1a',
+    },
+    
+    separator = {
+      fg = '#1a1a1a',          -- Very dark separator for background tabs
+      bg = '#0d0d0d',
+    },
+    
+    -- Tab close button hover effects
+    close_button_selected = {
+      fg = '#ff6b6b',          -- Red on hover for selected tab
+      bg = 'NONE',
+    },
+    
+    -- Error/warning diagnostic styling
+    error = {
+      fg = '#ff5555',
+      bg = '#0d0d0d',
+    },
+    
+    error_selected = {
+      fg = '#ff5555',
+      bg = 'NONE',
+    },
+    
+    warning = {
+      fg = '#ffaa00',
+      bg = '#0d0d0d',
+    },
+    
+    warning_selected = {
+      fg = '#ffaa00',
+      bg = 'NONE',
     },
   }
 }
 
--- Commands for better buffer management
+-- Command to close all buffers except current
 vim.api.nvim_create_user_command('BufferLineCloseAll', function()
   vim.cmd('BufferLineCloseLeft')
   vim.cmd('BufferLineCloseRight')
-end, {})
+end, { desc = 'Close all buffers except current' })
 
--- Auto-command to show bufferline only when needed
-vim.api.nvim_create_autocmd({ "BufAdd", "BufDelete" }, {
-  pattern = "*",
-  callback = function()
-    local buf_count = #vim.fn.getbufinfo({buflisted = 1})
-    if buf_count <= 1 then
-      vim.opt.showtabline = 0
-    else
-      vim.opt.showtabline = 2
-    end
-  end,
-})
