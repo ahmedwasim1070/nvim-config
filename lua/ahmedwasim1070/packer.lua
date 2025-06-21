@@ -31,45 +31,96 @@ vim.cmd([[
 
 -- Plugins
 return require("packer").startup(function(use)
-	use "wbthomason/packer.nvim" -- Packer manages itself
+	use("wbthomason/packer.nvim") -- Packer manages itself
 
 	-- Telescope
-	use {
+	use({
 		"nvim-telescope/telescope.nvim",
 		tag = "0.1.6",
-		requires = { { "nvim-lua/plenary.nvim" } }
-	}
+		requires = { { "nvim-lua/plenary.nvim" } },
+	})
 
 	-- Treesitter
-	use {
+	use({
 		"nvim-treesitter/nvim-treesitter",
-		run = ":TSUpdate"
-	}
+		run = ":TSUpdate",
+	})
 
 	-- Bufferline
-	use { "akinsho/bufferline.nvim", tag = "*", requires = "nvim-tree/nvim-web-devicons" }
+	use({ "akinsho/bufferline.nvim", tag = "*", requires = "nvim-tree/nvim-web-devicons" })
 
 	--  Theme
 	use({
 		"folke/tokyonight.nvim",
 		lazy = false,
 		priority = 1000,
-	}) 
+	})
 
 	--  Lualine
-	use {
-		'nvim-lualine/lualine.nvim',
-		requires = { 'nvim-tree/nvim-web-devicons', opt = true }
-	}
+	use({
+		"nvim-lualine/lualine.nvim",
+		requires = { "nvim-tree/nvim-web-devicons", opt = true },
+	})
 
 	--  Nvimtree
-	use {
-		'nvim-tree/nvim-tree.lua',
-		requires = 'nvim-tree/nvim-web-devicons',
+	use({
+		"nvim-tree/nvim-tree.lua",
+		requires = "nvim-tree/nvim-web-devicons",
 		config = function()
-			require('nvim-tree').setup({})
-		end
-	}
+			require("nvim-tree").setup({})
+		end,
+	})
+
+	-- prettier
+	use({
+		"stevearc/conform.nvim",
+		config = function()
+			require("conform").setup({
+				format_on_save = {
+					timeout_ms = 500,
+					lsp_fallback = true,
+				},
+				formatters_by_ft = {
+					javascript = { "prettier" },
+					typescript = { "prettier" },
+					html = { "prettier" },
+					css = { "prettier" },
+					json = { "prettier" },
+					markdown = { "prettier" },
+					lua = { "stylua" },
+					python = { "black" },
+					sh = { "shfmt" },
+					go = { "gofmt" },
+					cpp = { "clang_format" },
+					c = { "clang_format" },
+					java = { "clang_format" },
+				},
+			})
+		end,
+	})
+
+	-- LSP Support (no Mason)
+	use({
+		"VonHeikemen/lsp-zero.nvim",
+		branch = "v3.x",
+		requires = {
+			-- LSP Support
+			{ "neovim/nvim-lspconfig" },
+
+			-- Autocompletion
+			{ "hrsh7th/nvim-cmp" },
+			{ "hrsh7th/cmp-nvim-lsp" },
+			{ "hrsh7th/cmp-buffer" },
+			{ "hrsh7th/cmp-path" },
+			{ "hrsh7th/cmp-cmdline" },
+			{ "hrsh7th/cmp-nvim-lua" },
+
+			-- Snippets
+			{ "L3MON4D3/LuaSnip" },
+			{ "saadparwaiz1/cmp_luasnip" },
+			{ "rafamadriz/friendly-snippets" },
+		},
+	})
 
 	-- Automatically set up config after cloning packer.nvim
 	if packer_bootstrap then

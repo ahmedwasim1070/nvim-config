@@ -1,7 +1,7 @@
-vim.cmd[[colorscheme tokyonight-night]]   -- set the variant
+vim.cmd([[colorscheme tokyonight-night]]) -- set the variant
 
 -- Set transparent background
-vim.cmd[[
+vim.cmd([[
   highlight Normal guibg=NONE ctermbg=NONE
   highlight NormalNC guibg=NONE ctermbg=NONE
   highlight NormalFloat guibg=NONE ctermbg=NONE
@@ -9,5 +9,4 @@ vim.cmd[[
   highlight TelescopeNormal guibg=NONE ctermbg=NONE
   highlight TelescopeBorder guibg=NONE ctermbg=NONE
   highlight Pmenu guibg=NONE ctermbg=NONE
-]]
-
+]])
