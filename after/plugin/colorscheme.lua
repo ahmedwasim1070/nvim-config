@@ -20,22 +20,4 @@ vim.cmd([[
   highlight EndOfBuffer guibg=NONE ctermbg=NONE
   highlight VertSplit guibg=NONE ctermbg=NONE
   highlight WinSeparator guibg=NONE ctermbg=NONE
-  
-  " NvimTree transparency
 ]])
-
--- Alternative: Using Lua API (same effect, different syntax)
---[[
-local highlights = {
-  "Normal", "NormalNC", "NormalFloat", "FloatBorder",
-  "TelescopeNormal", "TelescopeBorder", "Pmenu",
-  "LineNr", "CursorLineNr", "SignColumn", "FoldColumn",
-  "EndOfBuffer", "VertSplit", "WinSeparator",
-  "NvimTreeNormal", "NvimTreeNormalNC", "NvimTreeEndOfBuffer",
-  "NvimTreeWinSeparator", "NvimTreeVertSplit"
-}
-
-for _, group in ipairs(highlights) do
-  vim.api.nvim_set_hl(0, group, { bg = "NONE" })
-end
---]]

@@ -28,6 +28,7 @@ require("lualine").setup({
 				fmt = function(str)
 					return str
 				end,
+				color = { bg = "#7DE2FF" },
 			},
 		},
 
@@ -93,6 +94,9 @@ require("lualine").setup({
 					dos = " ",
 					mac = " ",
 				},
+				color = {
+					fg = "#7DE2FF",
+				},
 			},
 		},
 
@@ -111,7 +115,7 @@ require("lualine").setup({
 				function()
 					return os.date("%H:%M")
 				end,
-				color = { fg = "#000000" }, -- Blue color for time
+				color = { fg = "#000000", bg = "#7DE2FF" },
 			},
 		},
 	},

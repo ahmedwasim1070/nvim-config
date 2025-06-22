@@ -390,23 +390,6 @@ vim.api.nvim_create_autocmd("FileType", {
 
 		-- Add right border using sign column or statuscolumn
 		vim.api.nvim_buf_set_option(bufnr, "signcolumn", "no")
-
-		-- Create a custom right border effect
-		vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter" }, {
-			buffer = bufnr,
-			callback = function()
-				-- Add spacing/margin effect by adjusting window
-				local width = vim.api.nvim_win_get_width(winnr)
-				if width > 2 then
-					-- Create visual separation with highlighting
-					vim.api.nvim_win_set_option(
-						winnr,
-						"winhighlight",
-						"Normal:NvimTreeNormal,EndOfBuffer:NvimTreeEndOfBuffer,VertSplit:NvimTreeBorder"
-					)
-				end
-			end,
-		})
 	end,
 })
 

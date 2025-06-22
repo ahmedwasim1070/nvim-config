@@ -79,21 +79,24 @@ require("bufferline").setup({
 		offsets = {
 			{
 				filetype = "NvimTree",
-				text = "File Explorer",
+				text = "Neovim",
 				text_align = "center",
-				separator = true,
+				separator = false,
+				padding = 1,
 			},
 			{
 				filetype = "neo-tree",
 				text = "Neo-tree",
 				text_align = "center",
-				separator = true,
+				separator = false,
+				padding = 1,
 			},
 			{
 				filetype = "alpha",
 				text = "Dashboard",
 				text_align = "center",
-				separator = true,
+				separator = false,
+				padding = 1,
 			},
 		},
 	},
@@ -102,7 +105,6 @@ require("bufferline").setup({
 		-- Main bufferline background
 		fill = {
 			bg = "#000000",
-			fg = "#1a1a1a",
 		},
 
 		-- Selected tab - transparent background with white text
@@ -158,8 +160,8 @@ require("bufferline").setup({
 
 		-- Hidden/background tabs
 		buffer = {
-			fg = "#666666", -- Darker gray for background tabs
-			bg = "#f3f3f3", -- Very dark background
+			fg = "#666666",
+			bg = "#0d0d0d",
 		},
 
 		-- Background tab numbers
@@ -180,26 +182,20 @@ require("bufferline").setup({
 			bg = "#0d0d0d",
 		},
 
-		-- Separators between tabs (light white borders)
+		-- Separators between tabs
 		separator_selected = {
-			fg = "#333333", -- Light gray separator for selected tab
+			fg = "#333333",
 			bg = "NONE",
 		},
 
 		separator_visible = {
-			fg = "#2a2a2a", -- Darker separator for visible tabs
+			fg = "#2a2a2a",
 			bg = "#1a1a1a",
 		},
 
 		separator = {
-			fg = "#1a1a1a", -- Very dark separator for background tabs
+			fg = "#1a1a1a",
 			bg = "#0d0d0d",
-		},
-
-		-- Tab close button hover effects
-		close_button_selected = {
-			fg = "#ff6b6b", -- Red on hover for selected tab
-			bg = "NONE",
 		},
 
 		-- Error/warning diagnostic styling
@@ -225,8 +221,58 @@ require("bufferline").setup({
 	},
 })
 
+-- Force apply highlights after setup
+vim.schedule(function()
+	-- Apply offset colors manually
+	vim.api.nvim_set_hl(0, "BufferLineOffsetSeparator", { fg = "#f3f3f3", bg = "#1e1e1e" })
+
+	-- Force re-apply all custom highlights to override theme
+	local custom_highlights = {
+		BufferLineFill = { bg = "#000000" },
+		BufferLineBackground = { fg = "#666666", bg = "#0d0d0d" },
+		BufferLineBufferSelected = { fg = "#f3f3f3", bg = "NONE", bold = true },
+		BufferLineCloseButtonSelected = { fg = "#ffffff", bg = "NONE" },
+		BufferLineModifiedSelected = { fg = "#ffaa00", bg = "NONE" },
+		BufferLineBufferVisible = { fg = "#888888", bg = "#000000" },
+		BufferLineSeparatorSelected = { fg = "#333333", bg = "NONE" },
+		BufferLineSeparatorVisible = { fg = "#2a2a2a", bg = "#1a1a1a" },
+		BufferLineSeparator = { fg = "#1a1a1a", bg = "#0d0d0d" },
+	}
+
+	for group, opts in pairs(custom_highlights) do
+		vim.api.nvim_set_hl(0, group, opts)
+	end
+end)
+
 -- Command to close all buffers except current
 vim.api.nvim_create_user_command("BufferLineCloseAll", function()
 	vim.cmd("BufferLineCloseLeft")
 	vim.cmd("BufferLineCloseRight")
 end, { desc = "Close all buffers except current" })
+
+-- Auto-command to reapply colors when colorscheme changes
+vim.api.nvim_create_autocmd("ColorScheme", {
+	callback = function()
+		vim.schedule(function()
+			-- Reapply offset colors
+			vim.api.nvim_set_hl(0, "BufferLineOffsetSeparator", { fg = "#1e1e1e", bg = "#1e1e1e" })
+
+			-- Reapply all custom highlights
+			local custom_highlights = {
+				BufferLineFill = { bg = "#000000" },
+				BufferLineBackground = { fg = "#666666", bg = "#0d0d0d" },
+				BufferLineBufferSelected = { fg = "#f3f3f3", bg = "NONE", bold = true },
+				BufferLineCloseButtonSelected = { fg = "#ffffff", bg = "NONE" },
+				BufferLineModifiedSelected = { fg = "#ffaa00", bg = "NONE" },
+				BufferLineBufferVisible = { fg = "#888888", bg = "#000000" },
+				BufferLineSeparatorSelected = { fg = "#333333", bg = "NONE" },
+				BufferLineSeparatorVisible = { fg = "#2a2a2a", bg = "#1a1a1a" },
+				BufferLineSeparator = { fg = "#1a1a1a", bg = "#0d0d0d" },
+			}
+
+			for group, opts in pairs(custom_highlights) do
+				vim.api.nvim_set_hl(0, group, opts)
+			end
+		end)
+	end,
+})
