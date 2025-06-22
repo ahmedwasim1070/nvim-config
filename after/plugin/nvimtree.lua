@@ -222,14 +222,16 @@ require("nvim-tree").setup({
 		end, opts("Clear All Marks"))
 	end,
 
+	-- CHANGED: Show all folders and files (no filtering)
 	filters = {
-		dotfiles = true,
-		git_ignored = true,
+		dotfiles = false, -- Show dotfiles/folders (like .git, .env, etc.)
+		git_ignored = false, -- Show git ignored files/folders
+		custom = {}, -- No custom filters
 	},
 
 	git = {
 		enable = true,
-		ignore = true,
+		ignore = false, -- Don't ignore git files
 		show_on_dirs = true,
 		show_on_open_dirs = true,
 		timeout = 400,
@@ -325,10 +327,10 @@ vim.api.nvim_create_autocmd({ "VimEnter" }, {
 			require("nvim-tree.api").tree.open()
 		elseif no_name then
 			if
-			    vim.fn.finddir(".git", ".;") ~= ""
-			    or vim.fn.findfile("package.json", ".;") ~= ""
-			    or vim.fn.findfile("Cargo.toml", ".;") ~= ""
-			    or vim.fn.findfile("go.mod", ".;") ~= ""
+				vim.fn.finddir(".git", ".;") ~= ""
+				or vim.fn.findfile("package.json", ".;") ~= ""
+				or vim.fn.findfile("Cargo.toml", ".;") ~= ""
+				or vim.fn.findfile("go.mod", ".;") ~= ""
 			then
 				require("nvim-tree.api").tree.open()
 			end
@@ -360,15 +362,60 @@ vim.keymap.set("n", "<leader>nt", ":NvimTreeToggle<CR>", { desc = "Toggle NvimTr
 vim.keymap.set("n", "c", ":NvimTreeCollapse<CR>", { desc = "Collapse NvimTree" })
 vim.keymap.set("n", "<leader>nr", ":NvimTreeRefresh<CR>", { desc = "Refresh NvimTree" })
 
--- FIXED HIGHLIGHT NAMES (proper cases)
+-- Transparent background with dark gray right border and margin
 vim.api.nvim_create_autocmd("ColorScheme", {
 	callback = function()
-		vim.api.nvim_set_hl(0, "NvimTreeNormal", { bg = "#1a1a1a" })
-		vim.api.nvim_set_hl(0, "NvimTreeEndOfBuffer", { bg = "#1a1a1a" })
+		-- Transparent background
+		vim.api.nvim_set_hl(0, "NvimTreeNormal", { bg = "#1e1e1e" })
+		vim.api.nvim_set_hl(0, "NvimTreeEndOfBuffer", { bg = "#1e1e1e" })
+
+		-- Keep other colors visible
 		vim.api.nvim_set_hl(0, "NvimTreeRootFolder", { fg = "#61afef", bold = true })
 		vim.api.nvim_set_hl(0, "NvimTreeModifiedFile", { fg = "#e5c07b" })
 		vim.api.nvim_set_hl(0, "NvimTreeGitDirty", { fg = "#e5c07b" })
 		vim.api.nvim_set_hl(0, "NvimTreeGitNew", { fg = "#98c379" })
 		vim.api.nvim_set_hl(0, "NvimTreeGitDeleted", { fg = "#e06c75" })
+	end,
+})
+
+-- Create autocmd to add right border and margin to NvimTree
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "NvimTree",
+	callback = function()
+		local bufnr = vim.api.nvim_get_current_buf()
+		local winnr = vim.api.nvim_get_current_win()
+
+		-- Set window options for border and margin
+		vim.api.nvim_win_set_option(winnr, "winhighlight", "Normal:NvimTreeNormal,EndOfBuffer:NvimTreeEndOfBuffer")
+
+		-- Add right border using sign column or statuscolumn
+		vim.api.nvim_buf_set_option(bufnr, "signcolumn", "no")
+
+		-- Create a custom right border effect
+		vim.api.nvim_create_autocmd({ "WinEnter", "BufEnter" }, {
+			buffer = bufnr,
+			callback = function()
+				-- Add spacing/margin effect by adjusting window
+				local width = vim.api.nvim_win_get_width(winnr)
+				if width > 2 then
+					-- Create visual separation with highlighting
+					vim.api.nvim_win_set_option(
+						winnr,
+						"winhighlight",
+						"Normal:NvimTreeNormal,EndOfBuffer:NvimTreeEndOfBuffer,VertSplit:NvimTreeBorder"
+					)
+				end
+			end,
+		})
+	end,
+})
+
+-- Define the border highlight
+vim.api.nvim_create_autocmd({ "ColorScheme", "VimEnter" }, {
+	callback = function()
+		-- Dark gray border color
+		vim.api.nvim_set_hl(0, "NvimTreeBorder", { fg = "#3c3c3c", bg = "NONE" })
+		-- Ensure vertical split appears as border
+		vim.api.nvim_set_hl(0, "VertSplit", { fg = "#3c3c3c", bg = "NONE" })
 	end,
 })

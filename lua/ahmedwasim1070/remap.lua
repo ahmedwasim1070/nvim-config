@@ -18,11 +18,11 @@ map("n", "<leader>fc", "<cmd>Telescope commands<CR>", opts)
 
 -- Bufferline
 -- Switch to next buffer
-map("n", "<Tab>", ":BufferLineCycleNext<CR>", opts) -- Next buffer in normal mode
-map("i", "<Tab>", "<Esc>:BufferLineCycleNext<CR>", opts) -- Next buffer from insert mode
+map("n", "tt", ":BufferLineCycleNext<CR>", opts) -- Next buffer in normal mode
+map("i", "<Tab>tt", "<Esc>:BufferLineCycleNext<CR>", opts) -- Next buffer from insert mode
 -- Switch to previous buffer
-map("n", "<S-Tab>", ":BufferLineCyclePrev<CR>", opts) -- Previous buffer in normal mode
-map("i", "<S-Tab>", "<Esc>:BufferLineCyclePrev<CR>", opts) -- Previous buffer from insert mode
+map("n", "TT", ":BufferLineCyclePrev<CR>", opts) -- Previous buffer in normal mode
+map("i", "<Tab>TT", "<Esc>:BufferLineCyclePrev<CR>", opts) -- Previous buffer from insert mode
 -- Create new buffer/tab
 map("n", "<leader>tn", ":enew<CR>", opts) -- Open new empty buffer
 map("i", "<leader>tn", "<Esc>:enew<CR>", opts) -- Open new buffer from insert mode
@@ -30,8 +30,8 @@ map("i", "<leader>tn", "<Esc>:enew<CR>", opts) -- Open new buffer from insert mo
 map("n", "<leader>tw", ":bdelete<CR>", opts) -- Close current buffer
 map("i", "<leader>tw", "<Esc>:bdelete<CR>", opts) -- Close buffer from insert mode
 -- Move current buffer left/right in the tab bar
-map("n", "<leader>tj", ":BufferLineMovePrev<CR>", opts) -- Move buffer to the left
-map("n", "<leader>tk", ":BufferLineMoveNext<CR>", opts) -- Move buffer to the right
+map("n", "<leader>tJ", ":BufferLineMovePrev<CR>", opts) -- Move buffer to the left
+map("n", "<leader>tK", ":BufferLineMoveNext<CR>", opts) -- Move buffer to the right
 -- Jump to specific buffer by position (Alt+Number)
 for i = 1, 9 do
 	map("n", "<leader>t" .. i, ":BufferLineGoToBuffer " .. i .. "<CR>", opts) -- Jump to buffer 1-9

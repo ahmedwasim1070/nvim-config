@@ -3,6 +3,8 @@ vim.fn.sign_define("NvimTreeDiagnosticWarnIcon", { text = "", texthl = "Diagn
 vim.fn.sign_define("NvimTreeDiagnosticInfoIcon", { text = "", texthl = "DiagnosticSignInfo" })
 vim.fn.sign_define("NvimTreeDiagnosticHintIcon", { text = "󰌶", texthl = "DiagnosticSignHint" })
 
+vim.opt.fillchars = { eob = " " }
+
 vim.opt.number = true
 vim.opt.relativenumber = false
 

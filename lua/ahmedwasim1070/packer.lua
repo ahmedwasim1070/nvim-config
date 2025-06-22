@@ -51,9 +51,14 @@ return require("packer").startup(function(use)
 
 	--  Theme
 	use({
-		"folke/tokyonight.nvim",
-		lazy = false,
-		priority = 1000,
+		"nyoom-engineering/oxocarbon.nvim",
+		config = function()
+			-- Optional: Configure the theme
+			vim.opt.background = "dark" -- or "light" for light mode
+
+			-- Set the colorscheme
+			vim.cmd("colorscheme oxocarbon")
+		end,
 	})
 
 	--  Lualine
