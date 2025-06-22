@@ -1,8 +1,5 @@
 require("lualine").setup({
 	options = {
-		-- Use a dark theme that matches your setup
-		theme = "auto",
-
 		-- Component separators
 		component_separators = { left = "", right = "" },
 
