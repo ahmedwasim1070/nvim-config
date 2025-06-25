@@ -5,6 +5,7 @@ vim.g.mapleader = " "
 
 map("i", "jj", "<ESC>", opts)
 map("i", "<C-H>", "<C-w>", opts)
+vim.api.nvim_set_keymap("t", "jj", [[<C-\><C-n>]], opts)
 map("n", "<leader>qf", vim.cmd.Ex)
 
 -- Telescope
@@ -30,8 +31,8 @@ map("i", "<leader>tn", "<Esc>:enew<CR>", opts) -- Open new buffer from insert mo
 map("n", "<leader>tw", ":bdelete<CR>", opts) -- Close current buffer
 map("i", "<leader>tw", "<Esc>:bdelete<CR>", opts) -- Close buffer from insert mode
 -- Move current buffer left/right in the tab bar
-map("n", "<leader>tJ", ":BufferLineMovePrev<CR>", opts) -- Move buffer to the left
-map("n", "<leader>tK", ":BufferLineMoveNext<CR>", opts) -- Move buffer to the right
+map("n", "<leader>tj", ":BufferLineMovePrev<CR>", opts) -- Move buffer to the left
+map("n", "<leader>tk", ":BufferLineMoveNext<CR>", opts) -- Move buffer to the right
 -- Jump to specific buffer by position (Alt+Number)
 for i = 1, 9 do
 	map("n", "<leader>t" .. i, ":BufferLineGoToBuffer " .. i .. "<CR>", opts) -- Jump to buffer 1-9
